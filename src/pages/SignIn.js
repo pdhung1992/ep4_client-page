@@ -4,6 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {loginFail, loginSuccess} from "../actions/auth-actions";
 import authServices from "../services/auth-services";
+import Swal from "sweetalert2";
 
 
 const SignIn = () => {
@@ -63,6 +64,15 @@ const SignIn = () => {
                 }
             } else {
                 dispatch(loginFail('Login failed.'));
+                Swal.fire({
+                    title: 'Oops!',
+                    icon: 'error',
+                    background: '#1a1a1a',
+                    color: '#f27474',
+                    text: `${data} Please try again!`,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#f27474'
+                }) ;
             }
         } catch (error) {
             const resMessage =

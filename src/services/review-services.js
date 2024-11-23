@@ -18,7 +18,7 @@ const createReview = async (formData, axiosConfig) => {
     }
 }
 
-const getMovieReviews = async (slug) => {
+const getMovieReviews = async (slug, userId) => {
     try {
         const url = `${GET_MOVIE_REVIEWS_API}${slug}`;
         const res = await apiServices.get(url);

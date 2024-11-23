@@ -4,6 +4,8 @@ import {loadScripts} from "../helpers/script-helpers";
 import {useDispatch, useSelector} from "react-redux";
 import authServices from "../services/auth-services";
 import {MOVIE_GENRES} from "../constants/constants";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPowerOff, faUser} from "@fortawesome/free-solid-svg-icons";
 
 
 const Header = () => {
@@ -31,6 +33,7 @@ const Header = () => {
     const handleSearch = (e) => {
         if (keyword.trim() !== ''){
             navigate(`/search?s=${keyword}`);
+            setKeyword('');
         }
     }
 
@@ -71,7 +74,7 @@ const Header = () => {
                                                     <Link to={'/'}>Home</Link>
                                                 </li>
                                                 <li className="menu-item">
-                                                    <Link to={MOVIE_GENRES + 'action'}>Movie</Link>
+                                                    <Link to={MOVIE_GENRES + 'action'}>Movies</Link>
                                                 </li>
                                                 <li>
                                                     <Link to={'/pricing'}>Pricing</Link>
@@ -98,14 +101,14 @@ const Header = () => {
                                                 </li>
                                                 {isLogin ? (
                                                     <li className="header-user-name">
-                                                        <Link to={'/movie'}>Hello, {user.userData.fullName}</Link>
+                                                        <Link to={'/account/settings'}>Hello, {user.userData.fullName}</Link>
                                                     </li>
                                                 ) : ([])}
                                                 {isLogin ? (
-                                                    <li className="header-btn"><button onClick={handleLogout} className="btn">Sign out</button>
+                                                    <li className="header-btn"><button onClick={handleLogout} className="btn"><FontAwesomeIcon icon={faPowerOff} /></button>
                                                     </li>
                                                 ) : (
-                                                    <li className="header-btn"><Link to={'/sign-in'} className="btn">Sign In</Link></li>
+                                                    <li className="header-btn"><Link to={'/sign-in'} className="btn"><FontAwesomeIcon icon={faUser} /></Link></li>
                                                 )}
                                             </ul>
                                         </div>

@@ -1,7 +1,7 @@
 import {
     CHANGE_AVATAR_API,
     CHANGE_PASSWORD_API, FORGOT_PASSWORD_API,
-    GET_NEW_AVATAR_API,
+    GET_NEW_AVATAR_API, GET_USER_INFO_API,
     REGISTER_API, RESET_PASSWORD_API,
     SIGN_IN_API
 } from "../constants/constants";
@@ -45,6 +45,22 @@ const logout = async () => {
     const url = '/auth/user/logout';
     await apiServices.get(url);
     return true;
+}
+
+const getUserInfo = async (axiosConfig) => {
+    try {
+        const url = GET_USER_INFO_API;
+        const res = await apiServices.get(url, axiosConfig);
+        return res.data;
+    }catch (error){
+        if (error.response) {
+            return error.response.data;
+        } else if (error.request) {
+            return 'No response from server';
+        } else {
+            return 'An error occurred';
+        }
+    }
 }
 
 const changePassword = async (formData, axiosConfig) => {
@@ -135,7 +151,8 @@ const authServices = {
     changeAvatar,
     getNewAvatar,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    getUserInfo
 }
 
 export default authServices;

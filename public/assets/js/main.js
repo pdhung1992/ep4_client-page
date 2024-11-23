@@ -189,6 +189,24 @@ window.addEventListener('scroll', function () {
 /*=============================================
 	=    		 Scroll Up  	         =
 =============================================*/
+function initScrollToTargets() {
+	const scrollToTargets = document.querySelectorAll('.scroll-to-target');
+	if (scrollToTargets.length > 0) {
+		scrollToTargets.forEach(function(targetElement) {
+			targetElement.addEventListener('click', function() {
+				const target = document.querySelector(targetElement.getAttribute('data-target'));
+				if (target) {
+					window.scrollTo({
+						top: target.offsetTop,
+						behavior: 'smooth'
+					});
+				}
+			});
+		});
+	}
+}
+
+initScrollToTargets();
 // if ($('.scroll-to-target').length) {
 //   $(".scroll-to-target").on('click', function () {
 //     var target = $(this).attr('data-target');
@@ -215,24 +233,7 @@ window.addEventListener('scroll', function () {
 // 	});
 // }
 
-function initScrollToTargets() {
-	const scrollToTargets = document.querySelectorAll('.scroll-to-target');
-	if (scrollToTargets.length > 0) {
-		scrollToTargets.forEach(function(targetElement) {
-			targetElement.addEventListener('click', function() {
-				const target = document.querySelector(targetElement.getAttribute('data-target'));
-				if (target) {
-					window.scrollTo({
-						top: target.offsetTop,
-						behavior: 'smooth'
-					});
-				}
-			});
-		});
-	}
-}
 
-initScrollToTargets();
 
 
 

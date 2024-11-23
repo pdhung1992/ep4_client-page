@@ -4,16 +4,17 @@ import {loadScripts} from "../helpers/script-helpers";
 import {IMAGE_URL, MOVIE_DETAIL, MOVIE_GENRES, VIDEO_URL} from "../constants/constants";
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import movieServices from "../services/movie-services";
-import {Button, Modal} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import paymentServices from "../services/payment-services";
 import {updateCurrentPage} from "../actions/page-actions";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faStar} from "@fortawesome/free-solid-svg-icons";
+import {faStar, faXmark} from "@fortawesome/free-solid-svg-icons";
 import ratingServices from "../services/rating-service";
 import reviewServices from "../services/review-services";
 import Swal from "sweetalert2";
 import reactionServices from "../services/reaction-services";
+import Review from "../components/Review";
 
 const MovieDetail = () => {
     useEffect(() => {
@@ -206,78 +207,6 @@ const MovieDetail = () => {
         }
     }, [rating]);
 
-    const autoResizeTextarea = (event) => {
-        const textarea = event.target;
-        textarea.style.height = 'auto';
-        textarea.style.height = `${textarea.scrollHeight}px`;
-    };
-
-    const [replyParentId, setReplyParentId] = useState(null);
-    const handleShowReplyBox = (reviewId) => {
-        setReplyParentId((prevId) => (prevId === reviewId ? null : reviewId));
-    }
-
-    const [review, setReview] = useState('');
-    const onChangeReview = (e) => {
-        setReview(e.target.value);
-    }
-
-    const handleReviewSubmit = async (e) => {
-        e.preventDefault();
-        const formData = {
-            movieId: movie.id,
-            content: review,
-            parentId: replyParentId,
-        }
-
-        const res = await reviewServices.createReview(formData, axiosConfig);
-        if (res && res.responseCode === 201) {
-            setReview('');
-            setReplyParentId(null);
-            Swal.fire({
-                title: 'Review submit success!',
-                text: 'Thank you for your review!',
-                icon: 'success',
-                confirmButtonText: 'Okay!',
-                confirmButtonColor: '#5ba515'
-            }).then(() => {
-                window.location.reload();
-            });
-        } else {
-            Swal.fire({
-                title: 'Oops!',
-                icon: 'error',
-                text: 'An error occurred. Please try again!',
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#f27474'
-            }) ;
-        }
-    }
-
-    const [replies, setReplies] = useState([]);
-    const fetchReplies = async (parentId) => {
-        const res = await reviewServices.getReviewByParentId(parentId);
-        setReplies(res.data);
-    };
-
-    const handleShowReplies = (parentId) => {
-        fetchReplies(parentId);
-    };
-
-    const handleReactionClick = async (id, type) => {
-        const formData = {
-            reviewId: id,
-            reactionType: type,
-        }
-
-        const res = await reactionServices.clickReaction(formData, axiosConfig);
-        if (res && res.responseCode === 200) {
-            console.log("Reaction submitted successfully");
-        } else {
-            console.error("Failed to submit reaction");
-        }
-    }
-
     return (
         <div>
             {/*Scroll-top*/}
@@ -325,7 +254,7 @@ const MovieDetail = () => {
                                         </ul>
                                         <div className="row" style={{paddingLeft: '5px'}}>
                                             <div className="total-views-count">
-                                                <p><i className="far fa-eye"></i> 2.7 million</p>
+                                                <p><i className="far fa-eye"></i> {movie.views}</p>
                                             </div>
                                             <div className="total-views-count">
                                                 <p><i className="fas fa-star"></i> {movie.rating} ({movie.ratingCount} rates)</p>
@@ -411,129 +340,11 @@ const MovieDetail = () => {
                                             <h2 className="title">What people say about this movie?</h2>
                                         </div>
                                     </div>
-                                    <div className="movie-review">
-                                        <div className="contact-form">
-                                            {isLoggedIn ? (
-                                                <form onSubmit={handleReviewSubmit}>
-                                                    <div className="row">
-                                                        <div className="col-md-9">
-                                                        <textarea
-                                                            className={'review-input'}
-                                                            name="review"
-                                                            placeholder="Leave a review..."
-                                                            style={{resize: 'none', overflow: 'hidden'}}
-                                                            onInput={(e) => autoResizeTextarea(e)}
-                                                            onChange={onChangeReview}
-                                                        ></textarea>
-                                                        </div>
-                                                        <div className="col-md-3 d-flex justify-content-center align-items-center">
-                                                            <button type={'submit'} className="btn btn-sm">Send</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            ) : (
-                                                <div className={'text-center'}>
-                                                    <h6><Link to={'/sign-in'} style={{color: '#e4d804'}}>Log in</Link> to review this movie</h6>
-                                                </div>
-                                            )}
-                                        </div>
-                                        <br/>
-                                        <h6>Reviews ({movie.reviewCount})</h6>
-                                        {Array.isArray(reviews) && reviews.length > 0 ? (
-                                            reviews.map((review) => (
-                                                <div className={'review-content'} key={review.id}>
-                                                    <div className={'review-header'}>
-                                                        <div className="row">
-                                                            <div className="col-md-6 text-left">
-                                                                <strong>{review.userName}</strong>
-                                                            </div>
-                                                            <div className="col-md-6 text-right">
-                                                                {[...Array(5)].map((_, index) => {
-                                                                    const starValue = index + 1;
-                                                                    return (
-                                                                        <FontAwesomeIcon
-                                                                            key={starValue}
-                                                                            icon={faStar}
-                                                                            style={{
-                                                                                color: starValue <= review.rating ? '#e4d804' : '#e4e5e9'
-                                                                            }}
-                                                                        />
-                                                                    );
-                                                                })}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className={'review-body'}>
-                                                        <p>{review.content}</p>
-                                                    </div>
-                                                    <div className={'review-footer'}>
-                                                        <div className="row">
-                                                            <div className="col-md-8">
-                                                                <span><i className="fas fa-thumbs-up reaction-btn" onClick={() => handleReactionClick(review.id, true)}></i> {review.likeCount}</span>
-                                                                <span className={'mx-3'}><i
-                                                                    className="fas fa-thumbs-down reaction-btn" onClick={() => handleReactionClick(review.id, false)}></i> {review.dislikeCount}</span>
-                                                                <span className={'review-reply-btn'}
-                                                                      onClick={() => handleShowReplyBox(review.id)}>Reply</span>
-                                                                <span className={'mx-3 review-reply-btn'}
-                                                                      style={{textDecoration: 'underline'}} onClick={() => handleShowReplies(review.id)}>See {review.replyCount ? review.replyCount : 0} replies <i
-                                                                    className="fas fa-hand-point-down"></i></span>
-                                                            </div>
-                                                            <div className="col-md-4 text-right font-italic">
-                                                                <p>at {review.createdAt}</p>
-                                                            </div>
-                                                        </div>
-                                                        {replyParentId === review.id && (
-                                                            <div className={'contact-form'}>
-                                                                <form onSubmit={handleReviewSubmit}>
-                                                                    <div className="row">
-                                                                        <div className="col-md-9">
-                                                                            <textarea
-                                                                                className={'reply-input'}
-                                                                                name="message"
-                                                                                placeholder="Leave a reply..."
-                                                                                style={{ resize: 'none', overflow: 'hidden' }}
-                                                                                onInput={(e) => autoResizeTextarea(e)}
-                                                                                onChange={onChangeReview}
-                                                                            ></textarea>
-                                                                        </div>
-                                                                        <div className="col-md-3 d-flex justify-content-center align-items-center">
-                                                                            <button type={'submit'} className="btn btn-sm">Reply</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        )}
-                                                        {Array.isArray(replies) && replies.length > 0 && replies.filter(reply => reply.parentId === review.id).map((reply) => (
-                                                            <div key={reply.id} className={'reply-content'}>
-                                                                <div className={'reply-header'}>
-                                                                    <div className="row">
-                                                                        <div className="col-md-6 text-left"><strong>{reply.userName}</strong></div>
-                                                                        <div className="col-md-6 text-right font-italic">Reply to {reply.replyTo}</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className={'reply-body'}>
-                                                                    <p>{reply.content}</p>
-                                                                </div>
-                                                                <div className={'reply-footer'}>
-                                                                    <div className="row">
-                                                                        <div className="col-md-8">
-                                                                                <span><i
-                                                                                    className="fas fa-thumbs-up reaction-btn" onClick={() => handleReactionClick(reply.id, true)}></i> {reply.likeCount}</span>
-                                                                            <span className={'mx-3'}><i
-                                                                                className="fas fa-thumbs-down reaction-btn" onClick={() => handleReactionClick(reply.id, false)}></i> {reply.dislikeCount}</span>
-                                                                        </div>
-                                                                        <div
-                                                                            className="col-md-4 text-right font-italic">
-                                                                            <p>at {review.createdAt}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            ))) : null}
-                                    </div>
+                                    <Review
+                                        movieId={movie.id}
+                                        movieSlug={slug}
+                                        movieReviewCount={movie.reviewCount}
+                                    />
                                 </div>
                             </div>
                             <div className="col-lg-5 mb-3">
@@ -639,7 +450,7 @@ const MovieDetail = () => {
                    centered
             >
                 <div className={'text-right video-modal-header'}>
-                    <button className={'video-modal-close-btn'} onClick={handleClose}>[Close]</button>
+                    <button className={'video-modal-close-btn'} onClick={handleClose}><FontAwesomeIcon icon={faXmark}/></button>
                 </div>
                 {error && (
                     <div className="error-message" style={{color: 'red', textAlign: 'center', margin: '10px 0'}}>

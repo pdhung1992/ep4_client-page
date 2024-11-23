@@ -1,8 +1,8 @@
 import {
     CHECK_USER_RIGHTS_API, CREATE_VNPAY_PAYMENT, GET_HOME_MOVIE_BY_CATEGORY_API, GET_MOVIE_BY_CATEGORY_API,
-    GET_SHOW_AT_HOME_MOVIES_API, MOVIE_BEST_MOVIES_BY_GENRE_API,
+    GET_SHOW_AT_HOME_MOVIES_API, MOVIE_BEST_MOVIES_BY_GENRE_API, MOVIE_BY_GENRE_API,
     MOVIE_DETAIL,
-    MOVIE_DETAIL_API, MOVIE_DETAIL_RELATED_API,
+    MOVIE_DETAIL_API, MOVIE_DETAIL_RELATED_API, SEARCH_MOVIE_API, SEARCH_RELATED_KEYWORDS_API,
     VIDEO_URL
 } from "../constants/constants";
 import apiServices from "./api-service";
@@ -43,7 +43,6 @@ const getHomeMovieByCategory = async (category) => {
 const getMovieDetail = async (slug, userId) => {
     try {
         const url = `${MOVIE_DETAIL_API}${slug}/${userId}`;
-        console.log(url);
         const res = await apiServices.get(url);
         return res.data;
     } catch (error) {
@@ -105,9 +104,58 @@ const watchMovie = async (fileName, axiosConfig) => {
     }
 }
 
+const getAllMoviesByGenre = async (slug, pageNo) => {
+    try {
+        const url = `${MOVIE_BY_GENRE_API}${slug}/${pageNo}`;
+        const res = await apiServices.get(url);
+        return res.data;
+    }catch (error){
+        if (error.response) {
+            return error.response.data;
+        } else if (error.request) {
+            return 'No response from server';
+        } else {
+            return 'An error occurred';
+        }
+    }
+}
+
 const getBestMoviesByGenre = async (slug) => {
     try {
         const url = `${MOVIE_BEST_MOVIES_BY_GENRE_API}${slug}`;
+        const res = await apiServices.get(url);
+        return res.data;
+    }catch (error){
+        if (error.response) {
+            return error.response.data;
+        } else if (error.request) {
+            return 'No response from server';
+        } else {
+            return 'An error occurred';
+        }
+    }
+}
+
+const searchMovies = async (keyword, pageNo) => {
+    try {
+        const url = `${SEARCH_MOVIE_API}${keyword}/${pageNo}`;
+        console.log(keyword)
+        const res = await apiServices.get(url);
+        return res.data;
+    }catch (error){
+        if (error.response) {
+            return error.response.data;
+        } else if (error.request) {
+            return 'No response from server';
+        } else {
+            return 'An error occurred';
+        }
+    }
+}
+
+const searchRelatedKeywords = async (keyword) => {
+    try {
+        const url = `${SEARCH_RELATED_KEYWORDS_API}${keyword}`;
         const res = await apiServices.get(url);
         return res.data;
     }catch (error){
@@ -128,7 +176,10 @@ const movieServices = {
     getMovieDetailsRelated,
     checkUserRights,
     watchMovie,
+    getAllMoviesByGenre,
     getBestMoviesByGenre,
+    searchMovies,
+    searchRelatedKeywords
 }
 
 export default movieServices;

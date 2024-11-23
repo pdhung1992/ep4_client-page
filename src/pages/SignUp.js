@@ -3,7 +3,6 @@ import {useEffect, useState} from "react";
 import {loadScripts} from "../helpers/script-helpers";
 import {useDispatch, useSelector} from "react-redux";
 import Swal from "sweetalert2";
-import * as authService from "swiper/element";
 import authServices from "../services/auth-services";
 
 
@@ -77,6 +76,8 @@ const SignUp = () => {
                     title: 'Register Successfully!',
                     text: 'Now you can Login with new Account!',
                     icon: 'success',
+                    background: '#1a1a1a',
+                    color: '#5ba515',
                     confirmButtonText: 'Login now!',
                     confirmButtonColor: '#5ba515'
                 });
@@ -86,6 +87,8 @@ const SignUp = () => {
                     title: 'Oops!',
                     icon: 'error',
                     text: 'An error occurred. Please try again!',
+                    background: '#1a1a1a',
+                    color: '#f27474',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#f27474'
                 }) ;

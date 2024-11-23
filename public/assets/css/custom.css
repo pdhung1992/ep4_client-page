@@ -36,12 +36,12 @@
 
 
 .video-modal-header{
-    background: #000000;
+    background: #1a1a1a;
 }
 
 .video-modal-close-btn{
     color: #FFFFFF;
-    background: #000000;
+    background: #1a1a1a;
     border: none;
     padding: 10px;
     font-size: 20px;
@@ -82,9 +82,8 @@
     width: 100%;
     text-align: center;
     margin: 40px auto;
-    background: #fff;
+    background: #1a1a1a;
     border-radius: 20px;
-    opacity: 0.7;
 }
 
 ._success i {
@@ -103,7 +102,7 @@
 ._success p {
     margin-bottom: 0px;
     font-size: 18px;
-    color: #495057;
+    color: #28a745;
     font-weight: 500;
 }
 
@@ -124,6 +123,10 @@
     color: #28a745;
     border: solid 2px #28a745;
     transition: 0.5s;
+}
+
+._failed p{
+    color: #dc3545;
 }
 
 ._failed-btn{
@@ -301,4 +304,41 @@
 }
 .movie-item{
 
+}
+
+.related-keywords{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.related-keyword{
+    background: #404446;
+    width: fit-content;
+    padding: 5px;
+    margin-right: 10px;
+    white-space: nowrap;
+    margin-top: 10px;
+}
+
+.related-keyword h5{
+    color: #FFFFFF;
+    margin-bottom: 0;
+}
+
+.related-keyword h5:hover{
+    color: #e4d804 !important;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.change-password-modal{
+    background: #1a1a1a;
+}
+
+.account-table-action{
+    cursor: pointer;
+}
+
+.account-table-action:hover{
+    color: #e4d804;
 }

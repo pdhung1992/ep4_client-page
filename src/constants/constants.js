@@ -10,6 +10,7 @@ export const RESET_PASSWORD_API = 'auth/user/reset-password';
 export const CHANGE_PASSWORD_API = 'auth/user/change-password';
 export const CHANGE_AVATAR_API = 'auth/user/change-avatar';
 export const GET_NEW_AVATAR_API = 'auth/user/get-new-avatar';
+export const GET_USER_INFO_API = 'users/user/info';
 
 //Images
 export const IMAGE_URL = 'http://localhost:8888/api/images/';
@@ -31,7 +32,10 @@ export const BEST_MOVIE_CATEGORY_ID = 6;
 
 export const MOVIE_DETAIL = '/movie/detail/';
 export const MOVIE_GENRES = '/movie/genres/';
+export const MOVIE_BY_GENRE_API = '/movies/client/genre/';
 export const MOVIE_BEST_MOVIES_BY_GENRE_API = '/movies/client/genre/best/';
+export const SEARCH_MOVIE_API = '/movies/client/search/';
+export const SEARCH_RELATED_KEYWORDS_API = '/movies/client/search/related-keys/';
 
 
 //Packages
@@ -56,3 +60,12 @@ export const GET_REVIEW_BY_PARENT_ID_API = 'reviews/parent/';
 
 //reaction
 export const REACTION_API = 'review-reactions/click';
+
+//User movies
+export const GET_USER_MOVIES_API = 'user-movie';
+
+//User packages
+export const GET_USER_PACKAGES_API = 'user-package';
+
+//transaction
+export const GET_USER_TRANSACTIONS_API = 'transactions/user';

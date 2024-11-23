@@ -75,6 +75,8 @@ const ResetPassword = () => {
                     title: 'Reset password success!',
                     text: `${res.responseMessage}`,
                     icon: 'success',
+                    background: '#1a1a1a',
+                    color: '#5ba515',
                     confirmButtonText: 'Okay!',
                     confirmButtonColor: '#5ba515'
                 }).then(() => {
@@ -85,6 +87,8 @@ const ResetPassword = () => {
                     title: 'Oops!',
                     icon: 'error',
                     text: 'An error occurred. Please try again!',
+                    background: '#1a1a1a',
+                    color: '#f27474',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#f27474'
                 }) ;

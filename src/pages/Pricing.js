@@ -18,7 +18,6 @@ const Pricing = () => {
             {/*Scroll-top-end*/}
 
             <main>
-
                 {/*breadcrumb-area*/}
                 <section className="breadcrumb-area breadcrumb-bg" data-background="/assets/img/bg/breadcrumb_bg.png">
                     <div className="container">

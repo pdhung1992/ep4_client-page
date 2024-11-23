@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import Home from "../pages/Home";
 import Header from "../components/Header";
 import Movie from "../pages/Movie";
@@ -8,7 +8,16 @@ import Footer from "../components/Footer";
 import MovieDetail from "../pages/MovieDetail";
 import {MOVIE_GENRES} from "../constants/constants";
 import Search from "../pages/Search";
+import {useSelector} from "react-redux";
+import Account from "../pages/Account";
 
+const PrivateRoute = ({element, roles}) => {
+    const user = useSelector(state => state.auth);
+    if (!user.adminData && !user.isLoggedIn) {
+        return <Navigate to="/sign-in"/>;
+    }
+    return element;
+}
 
 const Layout = () => {
     return (
@@ -21,6 +30,7 @@ const Layout = () => {
                 <Route path={'/pricing'} element={<Pricing/>}/>
                 <Route path={'/contact'} element={<Contact/>}/>
                 <Route path={'/search'} element={<Search/>}/>
+                <Route path={'/account/*'} element={<PrivateRoute element={<Account/>}/>}/>
             </Routes>
             <Footer/>
         </div>
