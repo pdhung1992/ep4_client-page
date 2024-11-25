@@ -20,8 +20,12 @@ const createReview = async (formData, axiosConfig) => {
 
 const getMovieReviews = async (slug, userId) => {
     try {
-        const url = `${GET_MOVIE_REVIEWS_API}${slug}`;
+        let url = `${GET_MOVIE_REVIEWS_API}${slug}`;
+        if (userId !== null) {
+            url = `${GET_MOVIE_REVIEWS_API}${slug}?userId=${userId}`;
+        }
         const res = await apiServices.get(url);
+        console.log(url)
         return res.data;
     }catch (error){
         if (error.response) {
@@ -34,9 +38,12 @@ const getMovieReviews = async (slug, userId) => {
     }
 }
 
-const getReviewByParentId = async (parentId) => {
+const getReviewByParentId = async (parentId, userId) => {
     try {
-        const url = `${GET_REVIEW_BY_PARENT_ID_API}${parentId}`;
+        let url = `${GET_REVIEW_BY_PARENT_ID_API}${parentId}`;
+        if (userId !== null) {
+            url = `${GET_REVIEW_BY_PARENT_ID_API}${parentId}?userId=${userId}`;
+        }
         const res = await apiServices.get(url);
         return res.data;
     }catch (error){

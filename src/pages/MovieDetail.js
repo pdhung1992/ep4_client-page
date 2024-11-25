@@ -113,7 +113,7 @@ const MovieDetail = () => {
     const fetchVideoData = async () => {
         try {
             const res = await movieServices.watchMovie(movie.files[0].fileName, axiosMovieConfig);
-
+            console.log(res);
             if (res.status === 200) {
                 setError(null);
                 const videoBlob = res.data;
@@ -123,7 +123,7 @@ const MovieDetail = () => {
                 if (res.responseCode === 403) {
                     setError("You are not authorized to view this video.");
                 } else {
-                    setError("An unexpected error occurred. Please try again later.");
+                    setError("You are not authorized or movie is not available at the moment.");
                 }
             }
         } catch (error) {
@@ -131,6 +131,28 @@ const MovieDetail = () => {
             setError("An unexpected error occurred.");
         }
     };
+
+    // Increase view count
+    useEffect(() => {
+        let timer;
+        if (show) {
+            const increaseViewCount = async () => {
+                const formData = new FormData();
+                formData.append('id', movie.id);
+                const res = await movieServices.increaseView(formData);
+                if (res && res.responseCode === 200) {
+                    console.log("View count increased successfully");
+                } else {
+                    console.error("Failed to increase view count");
+                }
+            }
+
+            timer = setTimeout(() => {
+                increaseViewCount();
+            }, 60000);
+            return () => clearTimeout(timer);
+        }
+    },[show, movie.id]);
 
     const handleRentMovie = async () => {
         const formData = {
@@ -389,7 +411,6 @@ const MovieDetail = () => {
                         <div className="row justify-content-center">
                             <div className="col-lg-8">
                                 <div className="section-title text-center mb-50">
-                                    <span className="sub-title">Best TV Series</span>
                                     <h2 className="title">Related movies</h2>
                                 </div>
                             </div>

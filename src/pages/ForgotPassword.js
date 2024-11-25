@@ -31,9 +31,14 @@ const ForgotPassword = () => {
     },[])
 
     const [email, setEmail] = useState('');
+    const [isValidEmail, setIsValidEmail] = useState(true);
 
     const onChangeEmail = (e) => {
-        setEmail(e.target.value);
+        const inputEmail = e.target.value;
+        setEmail(inputEmail);
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const isValid = emailRegex.test(inputEmail);
+        setIsValidEmail(isValid);
     }
 
     const handleForgotPassword = async (e) => {
@@ -80,11 +85,16 @@ const ForgotPassword = () => {
                                     <div className={'col-md-6 offset-3'}>
                                         <form onSubmit={handleForgotPassword}>
                                             <input type="text" placeholder="Enter your email *"
-                                                   className={'form-custom-input'}
+                                                   className={`form-custom-input ${isValidEmail === false ? 'mb-2' : ''}`}
                                                    name={'email'}
                                                    onChange={onChangeEmail}
                                             />
-                                            <button className="btn reset-pwd-btn" type={"submit"}>Send reset password to my email</button>
+                                            <div className={'form-floating mb-0 mt-0'}>
+                                                {!isValidEmail && <p style={{color: '#e4d804'}}>Email is not valid!</p>}
+                                            </div>
+                                            <button className="btn reset-pwd-btn" type={"submit"}>Send reset password to
+                                                my email
+                                            </button>
                                         </form>
                                     </div>
                                     <br/>

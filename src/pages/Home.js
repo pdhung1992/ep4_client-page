@@ -353,7 +353,7 @@ const Home = () => {
                 {/*pricing-area-end*/}
 
                 {/*hot-movie-area*/}
-                <section className="ucm-area top-rated-movie ucm-bg2" data-background="/assets/img/bg/ucm_bg02.jpg">
+                {/*<section className="ucm-area top-rated-movie ucm-bg2" data-background="/assets/img/bg/ucm_bg02.jpg">
                     <div className="container">
                         <div className="row align-items-end mb-25 home-slide-content">
                             <div className="col-lg-6">

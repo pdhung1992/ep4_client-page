@@ -1,6 +1,6 @@
 import {
     CHECK_USER_RIGHTS_API, CREATE_VNPAY_PAYMENT, GET_HOME_MOVIE_BY_CATEGORY_API, GET_MOVIE_BY_CATEGORY_API,
-    GET_SHOW_AT_HOME_MOVIES_API, MOVIE_BEST_MOVIES_BY_GENRE_API, MOVIE_BY_GENRE_API,
+    GET_SHOW_AT_HOME_MOVIES_API, INCREASE_MOVIE_VIEW_API, MOVIE_BEST_MOVIES_BY_GENRE_API, MOVIE_BY_GENRE_API,
     MOVIE_DETAIL,
     MOVIE_DETAIL_API, MOVIE_DETAIL_RELATED_API, SEARCH_MOVIE_API, SEARCH_RELATED_KEYWORDS_API,
     VIDEO_URL
@@ -95,6 +95,7 @@ const watchMovie = async (fileName, axiosConfig) => {
         return res;
     }catch (error){
         if (error.response) {
+            console.log(error.response)
             return error.response.data;
         } else if (error.request) {
             return 'No response from server';
@@ -169,6 +170,22 @@ const searchRelatedKeywords = async (keyword) => {
     }
 }
 
+const increaseView = async (formData) => {
+    try {
+        const url = `${INCREASE_MOVIE_VIEW_API}`;
+        const res = await apiServices.put(url, formData);
+        return res;
+    }catch (error){
+        if (error.response) {
+            return error.response.data;
+        } else if (error.request) {
+            return 'No response from server';
+        } else {
+            return 'An error occurred';
+        }
+    }
+}
+
 const movieServices = {
     getShowAtHomeMovies,
     getHomeMovieByCategory,
@@ -179,7 +196,8 @@ const movieServices = {
     getAllMoviesByGenre,
     getBestMoviesByGenre,
     searchMovies,
-    searchRelatedKeywords
+    searchRelatedKeywords,
+    increaseView
 }
 
 export default movieServices;

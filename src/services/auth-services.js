@@ -17,9 +17,9 @@ const register = async (formData) => {
         if (error.response) {
             return error.response.data;
         } else if (error.request) {
-            return 'No response from server';
+            return 'No response from server. Please try again later.';
         } else {
-            return 'An error occurred';
+            return 'An error occurred. Please try again later.';
         }
     }
 }
@@ -33,9 +33,9 @@ const login = async (formData) => {
         if (error.response) {
             return error.response.data;
         } else if (error.request) {
-            return 'No response from server';
+            return 'No response from server. Please try again later.';
         } else {
-            return 'An error occurred';
+            return 'An error occurred. Please try again later.';
         }
     }
 }
@@ -56,9 +56,9 @@ const getUserInfo = async (axiosConfig) => {
         if (error.response) {
             return error.response.data;
         } else if (error.request) {
-            return 'No response from server';
+            return 'No response from server. Please try again later.';
         } else {
-            return 'An error occurred';
+            return 'An error occurred. Please try again later.';
         }
     }
 }
@@ -72,9 +72,9 @@ const changePassword = async (formData, axiosConfig) => {
         if (error.response) {
             return error.response.data;
         } else if (error.request) {
-            return 'No response from server';
+            return 'No response from server. Please try again later.';
         } else {
-            return 'An error occurred';
+            return 'An error occurred. Please try again later.';
         }
     }
 }
@@ -88,9 +88,9 @@ const changeAvatar = async (formData, axiosConfig) => {
         if (error.response) {
             return error.response.data;
         } else if (error.request) {
-            return 'No response from server';
+            return 'No response from server. Please try again later.';
         } else {
-            return 'An error occurred';
+            return 'An error occurred. Please try again later.';
         }
     }
 }
@@ -104,9 +104,9 @@ const getNewAvatar = async (axiosConfig) => {
         if (error.response) {
             return error.response.data;
         } else if (error.request) {
-            return 'No response from server';
+            return 'No response from server. Please try again later.';
         } else {
-            return 'An error occurred';
+            return 'An error occurred. Please try again later.';
         }
     }
 }
@@ -120,9 +120,9 @@ const forgotPassword = async (formData) => {
         if (error.response) {
             return error.response.data;
         } else if (error.request) {
-            return 'No response from server';
+            return 'No response from server. Please try again later.';
         } else {
-            return 'An error occurred';
+            return 'An error occurred. Please try again later.';
         }
     }
 }
@@ -136,9 +136,9 @@ const resetPassword = async (formData) => {
         if (error.response) {
             return error.response.data;
         } else if (error.request) {
-            return 'No response from server';
+            return 'No response from server. Please try again later.';
         } else {
-            return 'An error occurred';
+            return 'An error occurred. Please try again later.';
         }
     }
 }

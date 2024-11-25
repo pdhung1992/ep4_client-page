@@ -30,32 +30,54 @@ const SignUp = () => {
     }, []);
 
     const [fullName, setFullName] = useState('');
+    const [isValidFullName, setIsValidFullName] = useState(true);
     const [email, setEmail] = useState('');
+    const [isValidEmail, setIsValidEmail] = useState(true);
     const [phone, setPhone] = useState('');
+    const [isValidPhone, setIsValidPhone] = useState(true);
     const [password, setPassword] = useState('');
+    const [isValidPassword, setIsValidPassword] = useState(true);
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [isValidConfirmPassword, setIsValidConfirmPassword] = useState(true);
     const [passwordsMatch, setPasswordsMatch] = useState(true);
 
     const onChangeFullName = (e) => {
-        setFullName(e.target.value);
+        const inputName = e.target.value;
+        setFullName(inputName);
+        const isValid = inputName.length >= 6;
+        setIsValidFullName(isValid);
     }
 
     const onChangeEmail = (e) => {
-        setEmail(e.target.value);
+        const inputEmail = e.target.value;
+        setEmail(inputEmail);
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const isValid = emailRegex.test(inputEmail);
+        setIsValidEmail(isValid);
     }
 
     const onChangePhone = (e) => {
-        setPhone(e.target.value);
+        const inputPhone = e.target.value;
+        setPhone(inputPhone);
+        const phoneRegex = /^\d{10}$/;
+        const isValid = phoneRegex.test(inputPhone);
+        setIsValidPhone(isValid);
     }
 
     const onChangePassword = (e) => {
-        setPassword(e.target.value);
-        checkPasswordMatch(e.target.value, confirmPassword);
+        const inputPassword = e.target.value;
+        setPassword(inputPassword);
+        checkPasswordMatch(inputPassword, confirmPassword);
+        const isValid = inputPassword.length >= 6;
+        setIsValidPassword(isValid);
     }
 
     const onChangeConfirmPassword = (e) => {
-        setConfirmPassword(e.target.value);
-        checkPasswordMatch(password, e.target.value);
+        const inputPasswordCfm = e.target.value;
+        setConfirmPassword(inputPasswordCfm);
+        checkPasswordMatch(password, inputPasswordCfm);
+        const isValid = inputPasswordCfm.length >= 6;
+        setIsValidConfirmPassword(isValid);
     }
 
     const checkPasswordMatch = (password, confirm) => {
@@ -67,9 +89,8 @@ const SignUp = () => {
 
         const formData = {fullName, email, phone, password};
 
-        if(passwordsMatch){
+        if(passwordsMatch && isValidFullName && isValidEmail && isValidPhone && isValidPassword && isValidConfirmPassword && fullName !== '' && email !== '' && phone !== '' && password !== ''){
             const response = await authServices.register(formData);
-            console.log(response);
             if(response.responseCode === 201){
                 setMessage("Register successfully!");
                 Swal.fire({
@@ -95,7 +116,27 @@ const SignUp = () => {
             }
         }
         else {
-            setMessage("Password do not match!")
+            if (passwordsMatch === false) {
+                Swal.fire({
+                    title: 'Oops!',
+                    icon: 'error',
+                    text: 'Passwords do not match.',
+                    background: '#1a1a1a',
+                    color: '#f27474',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#f27474'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Oops!',
+                    icon: 'error',
+                    text: 'Fill all the fields correctly and try again.',
+                    background: '#1a1a1a',
+                    color: '#f27474',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#f27474'
+                });
+            }
         }
     }
 
@@ -114,39 +155,59 @@ const SignUp = () => {
                                         <form onSubmit={handleRegister}>
                                             <input type="text"
                                                    placeholder="Full name *"
-                                                   className={'form-custom-input'}
+                                                   className={`form-custom-input ${isValidFullName === false ? 'mb-2' : ''}`}
                                                    value={fullName}
                                                    onChange={onChangeFullName}
                                                    name={'fullName'}
                                             />
+                                            <div className={'form-floating mb-0 mt-0 text-right'}>
+                                                {!isValidFullName && <p style={{color: '#e4d804'}}>Name must more than 6 characters.</p>}
+                                            </div>
                                             <input type="text"
                                                    placeholder="Email *"
-                                                   className={'form-custom-input'}
+                                                   className={`form-custom-input ${isValidEmail === false ? 'mb-2' : ''}`}
                                                    value={email}
                                                    onChange={onChangeEmail}
                                                    name={'email'}
                                             />
+                                            <div className={'form-floating mb-0 mt-0 text-right'}>
+                                                {!isValidEmail && <p style={{color: '#e4d804'}}>Email is not valid.</p>}
+                                            </div>
                                             <input type="text"
                                                    placeholder="Telephone number *"
-                                                   className={'form-custom-input'}
+                                                   className={`form-custom-input ${isValidPhone === false ? 'mb-2' : ''}`}
                                                    value={phone}
                                                    onChange={onChangePhone}
                                                    name={'phone'}
                                             />
+                                            <div className={'form-floating mb-0 mt-0 text-right'}>
+                                                {!isValidPhone &&
+                                                    <p style={{color: '#e4d804'}}>Phone must be 10 digits.</p>}
+                                            </div>
                                             <input type="password"
                                                    placeholder="Password *"
-                                                   className={'form-custom-input'}
+                                                   className={`form-custom-input ${isValidPassword === false ? 'mb-2' : ''}`}
                                                    value={password}
                                                    onChange={onChangePassword}
                                                    name={'password'}
                                             />
+                                            <div className={'form-floating mb-0 mt-0 text-right'}>
+                                                {!isValidPassword &&
+                                                    <p style={{color: '#e4d804'}}>Password must more than 6
+                                                        characters.</p>}
+                                            </div>
                                             <input type="password"
                                                    placeholder="Confirm password *"
-                                                   className={'form-custom-input'}
+                                                   className={`form-custom-input ${isValidConfirmPassword === false ? 'mb-2' : ''}`}
                                                    value={confirmPassword}
                                                    onChange={onChangeConfirmPassword}
                                                    name={'confirmPassword'}
                                             />
+                                            <div className={'form-floating mb-0 mt-0 text-right'}>
+                                                {!isValidConfirmPassword &&
+                                                    <p style={{color: '#e4d804'}}>Password must more than 6
+                                                        characters.</p>}
+                                            </div>
                                             <button className="btn" type={'submit'}>Sign up</button>
                                         </form>
                                     </div>

@@ -35,14 +35,16 @@ const Review = ({movieId, movieSlug, movieReviewCount}) => {
 
 
     const [reviews, setReviews] = useState([]);
-    const fetchReviews = async () => {
-        const res = await reviewServices.getMovieReviews(movieSlug);
+    const fetchReviews = async (userId) => {
+        const res = await reviewServices.getMovieReviews(movieSlug, userId);
         setReviews(res.data);
     }
 
     useEffect(() => {
-        fetchReviews();
-    }, []);
+        fetchReviews(userId);
+    }, [userId]);
+
+    console.log(reviews)
 
     const autoResizeTextarea = (event) => {
         const textarea = event.target;
@@ -71,42 +73,26 @@ const Review = ({movieId, movieSlug, movieReviewCount}) => {
         const res = await reviewServices.createReview(formData, axiosConfig);
         if (res && res.responseCode === 201) {
             if (replyParentId !== null) {
-                fetchReplies(replyParentId);
+                fetchReplies(replyParentId, userId);
+                fetchReviews(userId);
             }else {
-                fetchReviews();
+                fetchReviews(userId);
             }
             setReview('');
             setReplyParentId(null);
-            // Swal.fire({
-            //     title: 'Review submit success!',
-            //     text: 'Thank you for your review!',
-            //     icon: 'success',
-            //     background: '#1a1a1a',
-            //     color: '#5ba515',
-            //     confirmButtonText: 'Okay!',
-            //     confirmButtonColor: '#5ba515'
-            // });
         } else {
-            // Swal.fire({
-            //     title: 'Oops!',
-            //     icon: 'error',
-            //     text: 'An error occurred. Please try again!',
-            //     background: '#1a1a1a',
-            //     color: '#f27474',
-            //     confirmButtonText: 'OK',
-            //     confirmButtonColor: '#f27474'
-            // }) ;
+            console.log("Failed to submit review");
         }
     }
 
     const [replies, setReplies] = useState([]);
-    const fetchReplies = async (parentId) => {
-        const res = await reviewServices.getReviewByParentId(parentId);
+    const fetchReplies = async (parentId, userId) => {
+        const res = await reviewServices.getReviewByParentId(parentId, userId);
         setReplies(res.data);
     };
 
     const handleShowReplies = (parentId) => {
-        fetchReplies(parentId);
+        fetchReplies(parentId, userId);
     };
 
     const handleReactionClick = async (id, type) => {
@@ -118,9 +104,9 @@ const Review = ({movieId, movieSlug, movieReviewCount}) => {
         const res = await reactionServices.clickReaction(formData, axiosConfig);
         if (res && res.responseCode === 200) {
             if (replyParentId !== null) {
-                fetchReplies(replyParentId);
+                fetchReplies(replyParentId, userId);
             }else {
-                fetchReviews();
+                fetchReviews(userId);
             }
             console.log("Reaction submitted successfully");
         } else {
@@ -187,13 +173,15 @@ const Review = ({movieId, movieSlug, movieReviewCount}) => {
                             <div className={'review-footer'}>
                                 <div className="row">
                                     <div className="col-md-8">
-                                        <span><i className="fas fa-thumbs-up reaction-btn"
+                                        <span><i className={`fas fa-thumbs-up reaction-btn ${review.userReaction === true ? 'text-warning' : ''}`}
                                                  onClick={() => handleReactionClick(review.id, true)}></i> {review.likeCount}</span>
                                         <span className={'mx-3'}><i
-                                            className={`fas fa-thumbs-down reaction-btn ${review.userReaction ? 'text-warning' : ''}`}
+                                            className={`fas fa-thumbs-down reaction-btn ${review.userReaction === false ? 'text-warning' : ''}`}
                                             onClick={() => handleReactionClick(review.id, false)}></i> {review.dislikeCount}</span>
-                                        <span className={'review-reply-btn'}
-                                              onClick={() => handleShowReplyBox(review.id)}>Reply</span>
+                                        {isLoggedIn ? (
+                                            <span className={'review-reply-btn'}
+                                                  onClick={() => handleShowReplyBox(review.id)}>Reply</span>
+                                        ) : null}
                                         <span className={'mx-3 review-reply-btn'}
                                               style={{textDecoration: 'underline'}}
                                               onClick={() => handleShowReplies(review.id)}>See {review.replyCount ? review.replyCount : 0} replies <i
@@ -244,11 +232,11 @@ const Review = ({movieId, movieSlug, movieReviewCount}) => {
                                         <div className={'reply-footer'}>
                                             <div className="row">
                                                 <div className="col-md-8">
-                                                                                <span><i
-                                                                                    className="fas fa-thumbs-up reaction-btn"
-                                                                                    onClick={() => handleReactionClick(reply.id, true)}></i> {reply.likeCount}</span>
+                                                    <span><i
+                                                        className={`fas fa-thumbs-up reaction-btn ${reply.userReaction === true ? 'text-warning' : ''}`}
+                                                        onClick={() => handleReactionClick(reply.id, true)}></i> {reply.likeCount}</span>
                                                     <span className={'mx-3'}><i
-                                                        className="fas fa-thumbs-down reaction-btn"
+                                                        className={`fas fa-thumbs-down reaction-btn ${reply.userReaction === false ? 'text-warning' : ''}`}
                                                         onClick={() => handleReactionClick(reply.id, false)}></i> {reply.dislikeCount}</span>
                                                 </div>
                                                 <div

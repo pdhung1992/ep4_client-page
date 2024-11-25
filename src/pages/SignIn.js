@@ -69,7 +69,7 @@ const SignIn = () => {
                     icon: 'error',
                     background: '#1a1a1a',
                     color: '#f27474',
-                    text: `${data} Please try again!`,
+                    text: `${data}`,
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#f27474'
                 }) ;

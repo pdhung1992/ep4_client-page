@@ -37,6 +37,8 @@ export const MOVIE_BEST_MOVIES_BY_GENRE_API = '/movies/client/genre/best/';
 export const SEARCH_MOVIE_API = '/movies/client/search/';
 export const SEARCH_RELATED_KEYWORDS_API = '/movies/client/search/related-keys/';
 
+export const INCREASE_MOVIE_VIEW_API = 'movies/update/views';
+
 
 //Packages
 export const GET_PACKAGES_FOR_PAYMENT = 'packages/not-free';
